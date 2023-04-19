@@ -1,7 +1,12 @@
 <?php
 
+use App\Http\Controllers\CarWashServiceController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderStatusController;
 use App\Http\Controllers\TelegramController;
+use App\Http\Controllers\TypeCarController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,6 +24,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/clients', [ClientController::class, 'index']);
+Route::get('/type-cars', [TypeCarController::class, 'index']);
+Route::get('/order-statuses', [OrderStatusController::class, 'index']);
+Route::get('/orders', [OrderController::class, 'index']);
+Route::get('/car-wash-services', [CarWashServiceController::class, 'index']);
+
+
+
+// Auth
+Auth::routes();
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Tests
+Route::get('/testModal', [ClientController::class, 'testModal'])->name('testModal');
+
 //Route::get('/telegram', function(){
 //    \Illuminate\Support\Facades\Http::withoutVerifying()->post('https://api.tlgr.org/bot6081210784:AAFAq7u8wGQ0xWmw6KU3pEqOmjbefvAIpQU/sendMessage',
 //        [
@@ -26,10 +47,3 @@ Route::get('/', function () {
 //            'text' => 'Hi'
 //        ]);
 //});
-
-Route::get('/clients', [ClientController::class, 'index']);
-Route::get('/clients/list', [ClientController::class, 'getStudents'])->name('client.list');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

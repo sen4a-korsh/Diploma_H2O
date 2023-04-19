@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\ClientsDataTable;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
 class ClientController extends Controller
 {
-    public function index()
+    public function index(ClientsDataTable $dataTable)
     {
-        return view('admin.client.index');
+        return $dataTable->render('admin.client.index');
+    }
+
+    public function testModal()
+    {
+        return view('test.modal');
     }
 
     public function getStudents(Request $request)
