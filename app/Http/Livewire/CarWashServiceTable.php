@@ -150,7 +150,7 @@ final class CarWashServiceTable extends PowerGridComponent
      * @return array<int, Button>
      */
 
-    /*
+
     public function actions(): array
     {
        return [
@@ -160,11 +160,12 @@ final class CarWashServiceTable extends PowerGridComponent
 
            Button::make('destroy', 'Delete')
                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('car-wash-service.destroy', ['car-wash-service' => 'id'])
+               ->route('car-wash-service.destroy', ['id' => 'id'])
+               ->target('_self')
                ->method('delete')
         ];
     }
-    */
+
 
     /*
     |--------------------------------------------------------------------------

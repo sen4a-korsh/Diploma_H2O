@@ -8,6 +8,11 @@ class OrderController extends Controller
 {
     public function index()
     {
-        return view('admin.order.index');
+        return view('admin.order.index', ['name_table' => 'Order']);
+    }
+
+    public function destroy(Request $request)
+    {
+        dd($request) ;
     }
 }

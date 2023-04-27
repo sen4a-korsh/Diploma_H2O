@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Order;
 use App\Models\OrderStatus;
+use App\Models\TypeCar;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
@@ -52,8 +53,11 @@ final class OrderTable extends PowerGridComponent
     */
     public function datasource(): Builder
     {
-        return Order::query()->join('order_statuses', 'orders.order_status_id', '=', 'order_statuses.id')
-            ->select('orders.*', 'order_statuses.status_name as status_name');
+        return Order::query()
+            ->join('order_statuses', 'orders.order_status_id', '=', 'order_statuses.id')
+            ->join('type_cars', 'orders.type_car_id', '=', 'type_cars.id')
+//            ->join('type_cars', 'orders.type_car_id', '=', 'type_cars.id')
+            ->select('orders.*', 'order_statuses.status_name as status_name', 'type_cars.type_name as type_car_name');
     }
 
     /*
@@ -114,13 +118,32 @@ final class OrderTable extends PowerGridComponent
             Column::make('ID', 'id')
                 ->makeInputRange(),
 
+            Column::make('Client id', 'client_id')
+                ->searchable()
+                ->makeInputText('client_id')
+                ->sortable()
+                ->editOnClick(),
+
+            Column::make('Type Car', 'type_car_name')
+                ->searchable()
+                ->makeInputText('type_car_name')
+                ->sortable()
+                ->editOnClick()
+                ->makeInputSelect(TypeCar::all(), 'type_name', 'type_cars.id'),
+
+            Column::make('Date time', 'date_time')
+                ->searchable()
+                ->makeInputText('date_time')
+                ->sortable()
+                ->makeInputDatePicker()
+                ->editOnClick(),
+
             Column::make('status name', 'status_name')
                 ->searchable()
                 ->makeInputText('status_name')
                 ->sortable()
-                ->editOnClick(true)
-                ->makeInputSelect(OrderStatus::all(), 'status_name', 'order_statuses.id')
-            ,
+                ->editOnClick()
+                ->makeInputSelect(OrderStatus::all(), 'status_name', 'order_statuses.id'),
 //                ->editOnClick(true)
 //                ->toggleable(true, 'yes', 'no'),
 
@@ -152,21 +175,22 @@ final class OrderTable extends PowerGridComponent
      * @return array<int, Button>
      */
 
-    /*
+
     public function actions(): array
     {
        return [
-           Button::make('edit', 'Edit')
-               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-               ->route('order.edit', ['order' => 'id']),
+//           Button::make('edit', 'Edit')
+//               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
+//               ->route('order.edit', ['order' => 'id']),
 
            Button::make('destroy', 'Delete')
                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('order.destroy', ['order' => 'id'])
-               ->method('delete')
+               ->route('order.destroy', ['id' => 'id'])
+               ->target('_self')
+               ->method('delete'),
         ];
     }
-    */
+
 
     /*
     |--------------------------------------------------------------------------

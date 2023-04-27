@@ -25,11 +25,20 @@ Route::get('/', function () {
 });
 
 
-Route::get('/clients', [ClientController::class, 'index']);
-Route::get('/type-cars', [TypeCarController::class, 'index']);
-Route::get('/order-statuses', [OrderStatusController::class, 'index']);
-Route::get('/orders', [OrderController::class, 'index']);
-Route::get('/car-wash-services', [CarWashServiceController::class, 'index']);
+Route::get('/clients', [ClientController::class, 'index'])->name('client.index');
+Route::delete('/clients', [ClientController::class, 'destroy'])->name('client.destroy');
+
+Route::get('/type-cars', [TypeCarController::class, 'index'])->name('type-car.index');
+Route::delete('/type-cars', [TypeCarController::class, 'destroy'])->name('type-car.destroy');
+
+Route::get('/order-statuses', [OrderStatusController::class, 'index'])->name('order-status.index');
+Route::delete('/order-statuses', [OrderStatusController::class, 'destroy'])->name('order-status.destroy');
+
+Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
+Route::delete('/orders', [OrderController::class, 'destroy'])->name('order.destroy');
+
+Route::get('/car-wash-services', [CarWashServiceController::class, 'index'])->name('car-wash-service.index');
+Route::delete('/car-wash-services', [CarWashServiceController::class, 'destroy'])->name('car-wash-service.destroy');
 
 
 

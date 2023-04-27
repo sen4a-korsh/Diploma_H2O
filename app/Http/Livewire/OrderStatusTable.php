@@ -144,21 +144,22 @@ final class OrderStatusTable extends PowerGridComponent
      * @return array<int, Button>
      */
 
-    /*
+
     public function actions(): array
     {
        return [
-           Button::make('edit', 'Edit')
-               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-               ->route('order-order-status.edit', ['order-order-status' => 'id']),
+//           Button::make('edit', 'Edit')
+//               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
+//               ->route('order-order-status.edit', ['order-order-status' => 'id']),
 
            Button::make('destroy', 'Delete')
                ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('order-order-status.destroy', ['order-order-status' => 'id'])
-               ->method('delete')
+               ->route('order-status.destroy', ['id' => 'id'])
+               ->target('_self')
+               ->method('delete'),
         ];
     }
-    */
+
 
     /*
     |--------------------------------------------------------------------------
