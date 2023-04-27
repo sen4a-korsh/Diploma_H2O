@@ -9,7 +9,7 @@ class OrderStatusController extends Controller
 {
     public function index()
     {
-        return view('admin.order-status.index');
+        return view('admin.order-status.index', ['name_table' => 'Order Statuses']);
     }
 
     public function destroy(Request $request)

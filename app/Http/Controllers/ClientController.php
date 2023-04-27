@@ -11,7 +11,7 @@ class ClientController extends Controller
 {
     public function index(ClientsDataTable $dataTable)
     {
-        return $dataTable->render('admin.client.index');
+        return $dataTable->render('admin.client.index', ['name_table' => 'Clients']);
     }
 
     public function testModal()

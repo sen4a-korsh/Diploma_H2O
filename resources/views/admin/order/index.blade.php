@@ -1,4 +1,4 @@
-@extends('layouts.livewire-table-container')
+@extends('admin.layouts.livewire-table-container')
 
 @section('livewire-table')
 

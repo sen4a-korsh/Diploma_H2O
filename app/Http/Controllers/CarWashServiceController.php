@@ -9,7 +9,7 @@ class CarWashServiceController extends Controller
 {
     public function index()
     {
-        return view('admin.car-wash-service.index');
+        return view('admin.car-wash-service.index', ['name_table' => 'Car Wash Services']);
     }
 
     public function destroy(Request $request)
