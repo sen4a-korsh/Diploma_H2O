@@ -2,7 +2,7 @@
 
 @section('livewire-table')
 
-    <livewire:type-car-table/>
-
+    <livewire:type-car.type-car-table/>
+    @livewire('livewire-ui-modal')
 @endsection
 

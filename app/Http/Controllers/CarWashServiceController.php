@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarWashService\StoreRequest;
 use App\Models\CarWashService;
 use Illuminate\Http\Request;
 
@@ -12,11 +13,10 @@ class CarWashServiceController extends Controller
         return view('admin.car-wash-service.index', ['name_table' => 'Car Wash Services']);
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $status = CarWashService::find($request->id);
-        $status->delete();
-
+        CarWashService::destroy($id);
         return redirect()->route('car-wash-service.index');
     }
+
 }

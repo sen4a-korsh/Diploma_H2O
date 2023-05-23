@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\TypeCar;
 
 use App\Models\TypeCar;
 use Illuminate\Support\Carbon;
@@ -12,6 +12,28 @@ use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Heade
 final class TypeCarTable extends PowerGridComponent
 {
     use ActionButton;
+
+    public $createLivewireComponent = 'type-car';
+
+    public $type_name;
+    public $lead_time;
+
+    public bool $showErrorBag = true;
+
+    protected array $rules = [
+        'type_name.*' => ['required', 'min:2', 'max:255'],
+        'lead_time.*' => ['required'],
+    ];
+
+    public function onUpdatedEditable($id, $field, $value): void
+    {
+        $this->validate();
+        TypeCar::query()->find($id)->update([
+            $field => $value,
+        ]);
+    }
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -25,10 +47,9 @@ final class TypeCarTable extends PowerGridComponent
         $this->showCheckBox();
 
         return [
-            Exportable::make('export')
-                ->striped()
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
-            Header::make()->showSearchInput(),
+            Header::make()
+                ->includeViewOnBottom('components.button-create')->showSearchInput(),
+
             Footer::make()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -95,7 +116,7 @@ final class TypeCarTable extends PowerGridComponent
     |  Include Columns
     |--------------------------------------------------------------------------
     | Include the columns added columns, making them visible on the Table.
-    | Each column can be configured with properties, filters, actions...
+    | Each column can be configured with properties, filters, modal-actions...
     |
     */
 
@@ -108,26 +129,27 @@ final class TypeCarTable extends PowerGridComponent
     {
         return [
             Column::make('ID', 'id')
-                ->makeInputRange(),
+                ->makeInputRange()
+                ->sortable(),
 
             Column::make('type name', 'type_name')
                 ->searchable()
                 ->makeInputText('type_name')
                 ->sortable()
-                ->editOnClick(true),
+                ->editOnClick(),
 
             Column::make('lead time', 'lead_time')
                 ->searchable()
                 ->makeInputText('lead_time')
                 ->sortable()
-                ->editOnClick(true),
+                ->editOnClick(),
 
-            Column::make('CREATED AT', 'created_at_formatted', 'created_at')
+            Column::make('CREATED AT','created_at')
                 ->searchable()
                 ->sortable()
                 ->makeInputDatePicker(),
 
-            Column::make('UPDATED AT', 'updated_at_formatted', 'updated_at')
+            Column::make('UPDATED AT', 'updated_at')
                 ->searchable()
                 ->sortable()
                 ->makeInputDatePicker(),
@@ -153,15 +175,10 @@ final class TypeCarTable extends PowerGridComponent
     public function actions(): array
     {
        return [
-//           Button::make('edit', 'Edit')
-//               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-//               ->route('type-car.edit', ['type-car' => 'id']),
 
-           Button::make('destroy', 'Delete')
-               ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('type-car.destroy', ['id' => 'id'])
-               ->target('_self')
-               ->method('delete'),
+           Button::make('Delete', 'Delete')
+               ->class('btn btn-danger')
+               ->openModal('type-car.actions.delete-type-car', ['id_type_car' => 'id']),
         ];
     }
 

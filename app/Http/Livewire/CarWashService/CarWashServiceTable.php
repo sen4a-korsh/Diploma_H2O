@@ -1,17 +1,38 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\CarWashService;
 
-use App\Models\OrderStatus;
+use App\Models\CarWashService;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 
-final class OrderStatusTable extends PowerGridComponent
+final class CarWashServiceTable extends PowerGridComponent
 {
     use ActionButton;
+
+    public $createLivewireComponent  = 'car-wash-service';
+
+    public $name;
+    public $price;
+
+    public bool $showErrorBag = true;
+
+    protected array $rules = [
+        'name.*' => ['required', 'min:2', 'max:255'],
+        'price.*' => ['required', 'numeric'],
+    ];
+
+    public function onUpdatedEditable($id, $field, $value): void
+    {
+        $this->validate();
+        CarWashService::query()->find($id)->update([
+            $field => $value,
+        ]);
+    }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -25,15 +46,31 @@ final class OrderStatusTable extends PowerGridComponent
         $this->showCheckBox();
 
         return [
-            Exportable::make('export')
-                ->striped()
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
-            Header::make()->showSearchInput(),
+//            Exportable::make('export')
+//                ->striped()
+//                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
+
+            Header::make()
+                ->includeViewOnBottom('components.button-create')->showSearchInput(),
+
+//            Header::make()->showSearchInput(),
+
             Footer::make()
                 ->showPerPage()
                 ->showRecordCount(),
         ];
     }
+
+//    public function header(): array
+//    {
+//        return [
+//            Button::add('bulk-sold-out')
+//                ->caption(__('Mark as Sold-out'))
+//                ->class('cursor-pointer block bg-indigo-500 text-white')
+////                ->emit('bulkSoldOutEvent', [])
+//        ];
+//    }
+
 
     /*
     |--------------------------------------------------------------------------
@@ -46,11 +83,11 @@ final class OrderStatusTable extends PowerGridComponent
     /**
     * PowerGrid datasource.
     *
-    * @return Builder<\App\Models\OrderStatus>
+    * @return Builder<\App\Models\CarWashService>
     */
     public function datasource(): Builder
     {
-        return OrderStatus::query();
+        return CarWashService::query();
     }
 
     /*
@@ -85,9 +122,9 @@ final class OrderStatusTable extends PowerGridComponent
     public function addColumns(): PowerGridEloquent
     {
         return PowerGrid::eloquent()
-            ->addColumn('id')
-            ->addColumn('created_at_formatted', fn (OrderStatus $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
-            ->addColumn('updated_at_formatted', fn (OrderStatus $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
+            ->addColumn('id');
+//            ->addColumn('created_at_formatted', fn (CarWashService $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
+//            ->addColumn('updated_at_formatted', fn (CarWashService $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
     }
 
     /*
@@ -95,7 +132,7 @@ final class OrderStatusTable extends PowerGridComponent
     |  Include Columns
     |--------------------------------------------------------------------------
     | Include the columns added columns, making them visible on the Table.
-    | Each column can be configured with properties, filters, actions...
+    | Each column can be configured with properties, filters, modal-actions...
     |
     */
 
@@ -108,26 +145,32 @@ final class OrderStatusTable extends PowerGridComponent
     {
         return [
             Column::make('ID', 'id')
-                ->makeInputRange(),
+                ->makeInputRange()
+                ->sortable(),
 
-            Column::make('status name', 'status_name')
+            Column::make('name', 'name')
                 ->searchable()
-                ->makeInputText('status_name')
+                ->makeInputText('name')
                 ->sortable()
-                ->editOnClick(true),
+                ->editOnClick(),
 
-            Column::make('CREATED AT', 'created_at_formatted', 'created_at')
+            Column::make('price', 'price')
+                ->searchable()
+                ->makeInputText('price')
+                ->sortable()
+                ->editOnClick(),
+
+            Column::make('CREATED AT','created_at')
                 ->searchable()
                 ->sortable()
                 ->makeInputDatePicker(),
 
-            Column::make('UPDATED AT', 'updated_at_formatted', 'updated_at')
+            Column::make('UPDATED AT', 'updated_at')
                 ->searchable()
                 ->sortable()
                 ->makeInputDatePicker(),
 
-        ]
-;
+        ];
     }
 
     /*
@@ -139,7 +182,7 @@ final class OrderStatusTable extends PowerGridComponent
     */
 
      /**
-     * PowerGrid OrderStatus Action Buttons.
+     * PowerGrid CarWashService Action Buttons.
      *
      * @return array<int, Button>
      */
@@ -148,15 +191,31 @@ final class OrderStatusTable extends PowerGridComponent
     public function actions(): array
     {
        return [
-//           Button::make('edit', 'Edit')
-//               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-//               ->route('order-order-status.edit', ['order-order-status' => 'id']),
 
-           Button::make('destroy', 'Delete')
-               ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('order-status.destroy', ['id' => 'id'])
-               ->target('_self')
-               ->method('delete'),
+           Button::make('Delete', 'Delete')
+               ->class('btn btn-danger')
+               ->openModal('car-wash-service.actions.delete-car-wash-service', ['id_car_wash_service' => 'id']),
+
+//           Button::make('edit', 'Edit')
+//               ->class('btn btn-primary')
+//               ->openModal('car-wash-service.modal-actions.edit', ['id_car_wash_service' => 'id']),
+
+           //               ->route('', ['car-wash-service' => 'id'])
+//           ->dispatch(),
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! не удаляй, бро
+//           Button::add('edit')
+//               ->bladeComponent('button-edit', ['id' => 'id'])
+
+
+
+//
+//           Button::make('destroy', 'DeleteCarWashService')
+//               ->class('btn btn-danger')
+//               ->route('car-wash-service.destroy', ['car_wash_service' => 'id'])
+//               ->target('_self')
+//               ->id('delete')
+//               ->method('delete'),
+
         ];
     }
 
@@ -170,21 +229,27 @@ final class OrderStatusTable extends PowerGridComponent
     */
 
      /**
-     * PowerGrid OrderStatus Action Rules.
+     * PowerGrid CarWashService Action Rules.
      *
      * @return array<int, RuleActions>
      */
 
-    /*
+
     public function actionRules(): array
     {
        return [
+//
+//            Rule::button('edit')
+//                ->when(true)
+//                ->setAttribute('data-bs-toggle', 'modal')
+//                ->setAttribute('data-bs-target', '#exampleModal'),
+
 
            //Hide button edit for ID 1
-            Rule::button('edit')
-                ->when(fn($order-order-status) => $order-order-status->id === 1)
-                ->hide(),
+//            Rule::button('edit')
+//                ->when(fn($car-wash-service) => $car-wash-service->id === 1)
+//                ->hide(),
         ];
     }
-    */
+
 }

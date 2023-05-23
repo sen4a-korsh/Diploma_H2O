@@ -3,7 +3,7 @@
     <div class="dt--top-section">
         <div class="row">
             <div class="col-12 col-sm-6 d-flex justify-content-sm-start justify-content-center">
-                @include(powerGridThemeRoot().'.header.actions')
+                @include(powerGridThemeRoot().'.header.modal-actions')
 
                 <div class="me-1">
                     @includeWhen(data_get($setUp, 'exportable'), powerGridThemeRoot().'.header.export')

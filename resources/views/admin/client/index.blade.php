@@ -2,7 +2,8 @@
 
 @section('livewire-table')
 
-    <livewire:client-table/>
+    <livewire:client.client-table/>
+    @livewire('livewire-ui-modal')
 
 @endsection
 

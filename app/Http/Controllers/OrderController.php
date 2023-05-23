@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Order\StoreRequest;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -11,8 +13,9 @@ class OrderController extends Controller
         return view('admin.order.index', ['name_table' => 'Orders']);
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        dd($request) ;
+        Order::destroy($id);
+        return redirect()->route('order.index');
     }
 }

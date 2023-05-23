@@ -10,4 +10,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected $tablesForAdmin = [
+        'Orders',
+        'Clients',
+        'Car Wash Services',
+        'Order Statuses',
+        'Typre Cars',
+    ];
 }

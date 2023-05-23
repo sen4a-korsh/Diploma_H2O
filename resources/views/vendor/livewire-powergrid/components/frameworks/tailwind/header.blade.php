@@ -3,7 +3,7 @@
     <div class="md:flex md:flex-row w-full justify-between items-center">
         <div class="md:flex md:flex-row w-full">
             <div>
-                @include(powerGridThemeRoot().'.header.actions')
+                @include(powerGridThemeRoot().'.header.modal-actions')
             </div>
             <div class="flex flex-row justify-center items-center text-sm">
                 @if(data_get($setUp, 'exportable'))

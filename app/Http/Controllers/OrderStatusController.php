@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderStatus\StoreRequest;
 use App\Models\OrderStatus;
 use Illuminate\Http\Request;
 
@@ -12,11 +13,10 @@ class OrderStatusController extends Controller
         return view('admin.order-status.index', ['name_table' => 'Order Statuses']);
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $status = OrderStatus::find($request->id);
-        $status->delete();
-
+        OrderStatus::destroy($id);
         return redirect()->route('order-status.index');
     }
+
 }

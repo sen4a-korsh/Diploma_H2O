@@ -1,37 +1,32 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Http\Livewire\OrderStatus;
 
-use App\Models\Client;
+use App\Models\OrderStatus;
 use Illuminate\Support\Carbon;
-use Illuminate\Database\QueryException;
 use Illuminate\Database\Eloquent\Builder;
 use PowerComponents\LivewirePowerGrid\Rules\{Rule, RuleActions};
 use PowerComponents\LivewirePowerGrid\Traits\ActionButton;
 use PowerComponents\LivewirePowerGrid\{Button, Column, Exportable, Footer, Header, PowerGrid, PowerGridComponent, PowerGridEloquent};
 
-final class ClientTable extends PowerGridComponent
+final class OrderStatusTable extends PowerGridComponent
 {
     use ActionButton;
 
-    public $first_name;
-    public $last_name;
-    public $mobile_phone;
+    public $createLivewireComponent = 'order-status';
 
+    public $status_name;
 
     public bool $showErrorBag = true;
 
     protected array $rules = [
-        'first_name.*' => ['required', 'min:2'],
-        'last_name.*' => ['required', 'min:2'],
-        'mobile_phone.*' => ['required', 'integer'],
+        'status_name.*' => ['required', 'min:2', 'max:255'],
     ];
-
 
     public function onUpdatedEditable($id, $field, $value): void
     {
         $this->validate();
-        Client::query()->find($id)->update([
+        OrderStatus::query()->find($id)->update([
             $field => $value,
         ]);
     }
@@ -48,10 +43,9 @@ final class ClientTable extends PowerGridComponent
         $this->showCheckBox();
 
         return [
-            Exportable::make('export')
-                ->striped()
-                ->type(Exportable::TYPE_XLS, Exportable::TYPE_CSV),
-            Header::make()->showSearchInput(),
+            Header::make()
+                ->includeViewOnBottom('components.button-create')->showSearchInput(),
+
             Footer::make()
                 ->showPerPage()
                 ->showRecordCount(),
@@ -69,11 +63,11 @@ final class ClientTable extends PowerGridComponent
     /**
     * PowerGrid datasource.
     *
-    * @return Builder<\App\Models\Client>
+    * @return Builder<\App\Models\OrderStatus>
     */
     public function datasource(): Builder
     {
-        return Client::query();
+        return OrderStatus::query();
     }
 
     /*
@@ -109,10 +103,8 @@ final class ClientTable extends PowerGridComponent
     {
         return PowerGrid::eloquent()
             ->addColumn('id')
-            ->addColumn('first_name')
-            ->addColumn('name_lower', fn (Client $model) => strtolower(e($model->name)))
-            ->addColumn('created_at')
-            ->addColumn('created_at_formatted', fn (Client $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'));
+            ->addColumn('created_at_formatted', fn (OrderStatus $model) => Carbon::parse($model->created_at)->format('d/m/Y H:i:s'))
+            ->addColumn('updated_at_formatted', fn (OrderStatus $model) => Carbon::parse($model->updated_at)->format('d/m/Y H:i:s'));
     }
 
     /*
@@ -120,7 +112,7 @@ final class ClientTable extends PowerGridComponent
     |  Include Columns
     |--------------------------------------------------------------------------
     | Include the columns added columns, making them visible on the Table.
-    | Each column can be configured with properties, filters, actions...
+    | Each column can be configured with properties, filters, modal-actions...
     |
     */
 
@@ -133,41 +125,28 @@ final class ClientTable extends PowerGridComponent
     {
         return [
             Column::make('ID', 'id')
-                ->searchable()
+                ->makeInputRange()
                 ->sortable(),
 
-            Column::make('first name', 'first_name')
+            Column::make('status name', 'status_name')
                 ->searchable()
-                ->makeInputText('first_name')
+                ->makeInputText('status_name')
                 ->sortable()
-                ->editOnClick(true),
+                ->editOnClick(),
 
-            Column::make('last name', 'last_name')
+            Column::make('CREATED AT','created_at')
                 ->searchable()
-                ->makeInputText('last_name')
                 ->sortable()
-                ->editOnClick(true),
+                ->makeInputDatePicker(),
 
-            Column::make('mobile phone', 'mobile_phone')
+            Column::make('UPDATED AT', 'updated_at')
                 ->searchable()
-                ->makeInputText('mobile_phone')
                 ->sortable()
-                ->editOnClick(true),
+                ->makeInputDatePicker(),
 
-            Column::make('Created at', 'created_at')
-                ->hidden(),
-
-            Column::make('Created at', 'created_at_formatted', 'created_at')
-                ->makeInputDatePicker()
-                ->searchable()
         ];
     }
-//    'id',
-//            'first_name',
-//            'last_name',
-//            'mobile_phone',
-//            'created_at',
-//            'updated_at',
+
     /*
     |--------------------------------------------------------------------------
     | Actions Method
@@ -177,7 +156,7 @@ final class ClientTable extends PowerGridComponent
     */
 
      /**
-     * PowerGrid Client Action Buttons.
+     * PowerGrid OrderStatus Action Buttons.
      *
      * @return array<int, Button>
      */
@@ -186,16 +165,10 @@ final class ClientTable extends PowerGridComponent
     public function actions(): array
     {
        return [
-//           Button::make('edit', 'Edit')
-////               ->class('bg-indigo-500 cursor-pointer text-white px-3 py-2.5 m-1 rounded text-sm')
-//               ->class('btn btn-primary')
-//               ->route('', ['client' => 'id']),
 
-           Button::make('destroy', 'Delete')
-               ->class('bg-red-500 cursor-pointer text-white px-3 py-2 m-1 rounded text-sm')
-               ->route('client.destroy', ['id' => 'id'])
-               ->target('_self')
-               ->method('delete')
+           Button::make('Delete', 'Delete')
+               ->class('btn btn-danger')
+               ->openModal('order-status.actions.delete-order-status', ['id_order_status' => 'id']),
         ];
     }
 
@@ -209,7 +182,7 @@ final class ClientTable extends PowerGridComponent
     */
 
      /**
-     * PowerGrid Client Action Rules.
+     * PowerGrid OrderStatus Action Rules.
      *
      * @return array<int, RuleActions>
      */
@@ -221,7 +194,7 @@ final class ClientTable extends PowerGridComponent
 
            //Hide button edit for ID 1
             Rule::button('edit')
-                ->when(fn($client) => $client->id === 1)
+                ->when(fn($order-order-status) => $order-order-status->id === 1)
                 ->hide(),
         ];
     }

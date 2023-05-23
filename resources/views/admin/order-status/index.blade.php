@@ -2,7 +2,8 @@
 
 @section('livewire-table')
 
-    <livewire:order-status-table/>
+    <livewire:order-status.order-status-table/>
+    @livewire('livewire-ui-modal')
 
 @endsection
 

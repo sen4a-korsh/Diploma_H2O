@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TypeCar\StoreRequest;
 use App\Models\TypeCar;
 use Illuminate\Http\Request;
 
@@ -12,11 +13,10 @@ class TypeCarController extends Controller
         return view('admin.type-car.index', ['name_table' => 'Type Cars']);
     }
 
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $status = TypeCar::find($request->id);
-        $status->delete();
-
-        return redirect()->route('type-cars.index');
+        TypeCar::destroy($id);
+        return redirect()->route('type-car.index');
     }
+
 }

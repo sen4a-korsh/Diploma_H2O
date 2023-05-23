@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class CarWashService extends Model
 {
     use HasFactory;
+
+    protected $guarded;
 }

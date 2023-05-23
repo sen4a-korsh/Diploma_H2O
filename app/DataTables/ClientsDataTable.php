@@ -25,10 +25,10 @@ class ClientsDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('action', '')
 //                function ($client){
-//                return '<button class="btn btn-success actions" value="edit/'.$client->id.'">Edit</button> '.
-//                        '<button class="btn btn-danger actions" value="delete/'.$client->id.'">Delete</button>';
+//                return '<button class="btn btn-success modal-actions" value="edit/'.$client->id.'">Edit</button> '.
+//                        '<button class="btn btn-danger modal-actions" value="delete/'.$client->id.'">DeleteCarWashService</button>';
 ////                return '<a class="btn btn-success action-button" href="clients/edit/'.$client->id.'">Edit</a>
-////                        <a class="btn btn-danger action-button" href="clients/delete/'.$client->id.'">Delete</a>';
+////                        <a class="btn btn-danger action-button" href="clients/delete/'.$client->id.'">DeleteCarWashService</a>';
 //            })
             ->setRowId('id');
     }
@@ -88,12 +88,12 @@ class ClientsDataTable extends DataTable
                 ->printable(false)
 //                ->width(200)
 //                ->data('<button>id</button>')
-//                ->content('<button type="button" class="btn btn-success actions" value="edit/">Edit</button> ')
-                ->content('<button type="button" class="btn btn-success actions" value="edit/">Edit</button> ')
+//                ->content('<button type="button" class="btn btn-success modal-actions" value="edit/">Edit</button> ')
+                ->content('<button type="button" class="btn btn-success modal-actions" value="edit/">Edit</button> ')
 //                ->content(function ($client):string{
 //                    return 'asd';
 //                })
-                ->addClass('text-center actions'),
+                ->addClass('text-center modal-actions'),
         ];
     }
 
