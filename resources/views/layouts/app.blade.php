@@ -85,6 +85,18 @@
 
                                 </div>
                             </li>
+
+                            <li class="nav-item dropdown">
+                                <a class="nav-link" style="font-size: 15px" href="#" role="button" id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Settings
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                                        <path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                                    </svg>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" href="{{route('telegram-bot-settings.index')}}">Telegram Bot Connection</a>
+                                </div>
+                            </li>
                         @endif
 
                         <!-- Authentication Links -->
@@ -130,6 +142,7 @@
             @yield('content')
         </main>
     </div>
+{{--    <img src="https://drive.google.com/uc?export=view&id=1V4NLSUJ_3J7oMIZrWe4WW6IESDzuDeJj" height="500"></img>--}}
 
 {{--    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>--}}
 

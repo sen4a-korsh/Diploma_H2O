@@ -16,7 +16,7 @@ class CreateTypeCar extends ModalComponent
         'lead_time' => 'required',
     ];
 
-    public function createOrder()
+    public function createRecord()
     {
         $validatedData = $this->validate();
 

@@ -4,11 +4,14 @@ use App\Http\Controllers\CarWashServiceController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderStatusController;
+use App\Http\Controllers\TelegramBotConnectionSettingController;
 use App\Http\Controllers\TelegramController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\TypeCarController;
+use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,12 +44,19 @@ Route::group(['middleware' => 'admin'], function(){
     Route::get('/car-wash-services', [CarWashServiceController::class, 'index'])->name('car-wash-service.index');
     Route::delete('/car-wash-services/{id}', [CarWashServiceController::class, 'destroy'])->name('car-wash-service.delete');
 
+    Route::get('/telegram-bot-settings', [TelegramBotConnectionSettingController::class, 'index'])->name('telegram-bot-settings.index');
+    Route::post('/telegram-bot-settings', [TelegramBotConnectionSettingController::class, 'store'])->name('telegram-bot-settings.store');
+    Route::post('/telegram-bot-settings/setwebhook', [TelegramBotConnectionSettingController::class, 'setWebhook'])->name('telegram-bot-settings.setwebhook');
+    Route::post('/telegram-bot-settings/getwebhookinfo', [TelegramBotConnectionSettingController::class, 'getWebhookInfo'])->name('telegram-bot-settings.getwebhookinfo');
 
-
+    Route::get('/test-telegram-bot-get-info', [TelegramBotConnectionSettingController::class, 'testGetInfo'])->name('test-telegram-bot-get-info');
 });
 
+Route::post(Telegram::getAccessToken(), function (){
+    Telegram::commandsHandler(true);
+});
 
-
+Route::post('/webhook', WebhookController::class)->name('webhook.receive');
 
 
 // Auth
